@@ -75,8 +75,7 @@ class WordResource(Resource):
     def get_object_list(self, request):
         
         gdb = GraphDatabase(GRAPH_DATABASE_REST_URL)
-        # cannot put 'ref' from morpheus in here, because smyth was renamed to ref
-        attrlist = ['lang','CTS', 'length', 'case', 'dialect', 'head', 'form', 'posClass', 'cid', 'gender', 'tbwid', 'pos', 'value', 'degree', 'number','lemma', 'relation', 'isIndecl', 'posAdd', 'mood', 'tense', 'voice', 'person']
+        attrlist = ['lang','CTS', 'length', 'case', 'dialect', 'head', 'form', 'posClass', 'cid', 'gender', 'tbwid', 'pos', 'value', 'degree', 'number','lemma', 'relation', 'isIndecl', 'ref', 'posAdd', 'mood', 'tense', 'voice', 'person']
         words = []
         query_params = {}
         
