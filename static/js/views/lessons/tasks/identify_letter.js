@@ -85,7 +85,7 @@ define(['jquery',
 				var accuracy = BaseTaskView.prototype.getAccuracy.apply(this, [answer, userAnswer]);
 
 				// Determine new state of the task
-				BaseTaskView.prototype.updateTaskState.apply(this, [this.topic, answer, userAnswer]);
+				var newState = BaseTaskView.prototype.getNewState.apply(this, [answer, userAnswer]);
 
 				// Send a submission to the server
 				this.sendSubmission({ 
@@ -99,10 +99,7 @@ define(['jquery',
 				});
 
 				// Update our UI accordingly
-				this.fullRender({ state: this.topic.getCurrentTask().state });
-
-				// Communicate progress up the view chain
-				BaseTaskView.prototype.updateTaskAccuracy.apply(this, [this.topic, accuracy]);
+				this.fullRender({ state: newState });
 			},
 			sendSubmission: function(submission) {
 				BaseTaskView.prototype.sendSubmission.apply(this, [submission]);

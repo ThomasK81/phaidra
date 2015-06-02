@@ -13,8 +13,6 @@ define(['jquery',
 			},
 			initialize: function(options) {
 				_.bindAll(this, 'checkScroll');
-				_.bindAll(this, 'renderTopics');
-
 				$(window).scroll(this.checkScroll);
 
 				this.user = options.user;
@@ -30,19 +28,16 @@ define(['jquery',
 
 				this.isLoading = true;
 				this.collection.fetch({
-					success: function(models) {
-						that.collection.getAccuracies({ success: that.renderTopics });	
+					success: function(topics) {
+						var template = _.template(LessonListTemplate);
+						that.$el.append(template({
+							topics: topics.models, 
+							LOCALE: LOCALE, 
+							user: that.user 
+						})); 
+						that.isLoading = false;
 					}
 				});
-			},
-			renderTopics: function(topicCollection) {
-				var template = _.template(LessonListTemplate);
-				this.$el.append(template({
-					topics: this.collection.models, 
-					LOCALE: LOCALE, 
-					user: this.user 
-				})); 
-				this.isLoading = false;
 			},
 			checkScroll: function() {
 				var triggerPoint = 100;

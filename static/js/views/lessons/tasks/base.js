@@ -71,8 +71,17 @@ define(['jquery',
 					}
 				});
 			},
-			getState: function(answer, userInput) {
+			getNewState: function(answer, userInput) {
 				// Return a state based on edit distance
+				var distance = Utils.lDistance(answer, userInput);
+				
+				if (distance == 0)
+					return 'success';
+				
+				if (distance > answer.length)
+					return 'error';
+
+				return 'warning';
 			},
 			getAccuracy: function(a, b) {
 				/* If you want to do any pre-processing before we compare user answers,
@@ -82,32 +91,6 @@ define(['jquery',
 				 */
 
 				 return Utils.compareStrings(a, b);
-			},
-			updateTaskAccuracy: function(topic, accuracy) {
-				var avg, attempts = topic.get('attempts');
-
-				if (attempts === 0) {
-					avg = accuracy;
-				}
-				else {
-					// Calcuate the weighted accuracy
-					var total_attempts = attempts + 1;
-
-					var prev = (attempts / total_attempts) * topic.get('accuracy'); 
-					var curr = (1 / total_attempts) * accuracy;
-
-					var avg = prev + curr; 
-				}
-
-				// Increment attempts, set accuracy
-				topic.set('attempts', topic.get('attempts') + 1);
-				topic.set('accuracy', Math.round(avg));
-			},
-			updateTaskState: function(topic, answer, userInput) {
-				// Get the current task
-				var task = topic.getCurrentTask();
-				var distance = Utils.compareStrings(answer, userInput);
-				task.state = distance === 100 ? 'success' : 'warning';
 			}
 		});
 	}

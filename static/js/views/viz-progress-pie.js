@@ -5,9 +5,11 @@ define(['jquery', 'underscore', 'backbone', 'd3'], function($, _, Backbone, d3) 
 			initialize: function(options) {
 				var s = options.statistics;
 
-				this.drawDonut('#syn', (s.syntax), '#D15241', 'Syntax'); 		
-				this.drawDonut('#morph', (s.morphology), '#1FADAD', 'Morphology'); 		
-				this.drawDonut('#vocab', (s.vocab), '#f4bc78', 'Vocabulary'); 		
+				this.drawDonut('#vocab', (s.vocab * 100), '#D15241', 'Vocabulary'); 		
+				this.drawDonut('#morph', (s.morphology * 100), '#1FADAD', 'Morphology'); 		
+				this.drawDonut('#syn', (s.syntax * 100), '#523D5B', 'Syntax'); 		
+
+				//this.drawSparkline('#records .sparkline', [1, 10, 5, 7, 2, 8, 5, 9, 2, 1], '#333');
 			},
 			render: function() {
 				return this;	

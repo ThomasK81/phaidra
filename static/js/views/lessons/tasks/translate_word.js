@@ -13,8 +13,6 @@ define(['jquery',
 				'submit form': 'checkAnswer'
 			},
 			initialize: function(options) {
-				this.topic = options.topic;
-
 				BaseTaskView.prototype.initialize.apply(this, [options]);
 			},
 			render: function() {
@@ -50,9 +48,6 @@ define(['jquery',
 					options: options
 				}));
 
-				// Set the starttime for this exercise
-				this.starttime = new Date();
-
 				// Make it possible to type greek in the textarea
 				var answerBox = this.$el.find('input[type="text"]')[0];
 				new TypeGeek(answerBox);
@@ -83,31 +78,11 @@ define(['jquery',
 				var answer = this.model.get('value');
 				var userAnswer = inputField.val();
 
-				// Check accuracy
-				var accuracy = BaseTaskView.prototype.getAccuracy.apply(this, [answer, userAnswer]);
-
-				// Determine new state of the task
-				BaseTaskView.prototype.updateTaskState.apply(this, [this.topic, answer, userAnswer]);
-
-				// Send a submission to the server
-				this.sendSubmission({ 
-					response: userAnswer, 
-					accuracy: accuracy,
-					ref: this.topic.get('ref'),
-					encounteredWords: this.collectEncounteredWords() || [""],
-					timestamp: (new Date()).toISOString(),
-					task: 'translate_word',
-					starttime: this.starttime.toISOString()
-				});
+				// Call our BaseTask's answer checking functionality 
+				var newState = BaseTaskView.prototype.getState.apply(this, [answer, userAnswer]);
 
 				// Update our UI accordingly
-				this.fullRender({ state: this.topic.getCurrentTask().state });
-
-				// Communicate progress up the view chain
-				BaseTaskView.prototype.updateTaskAccuracy.apply(this, [this.topic, accuracy]);
-			},
-			collectEncounteredWords: function() {
-				return _.pluck(this.phrase, 'CTS');
+				this.fullRender({ state: newState });
 			}
 		});
 	}
